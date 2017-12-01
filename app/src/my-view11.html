@@ -1,0 +1,520 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/vaadin-material-theme/vaadin-grid.html">
+<link rel="import" href="../bower_components/vaadin-grid/vaadin-grid.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="my-view11">
+	<template>
+		<style include="shared-styles">
+			:host {
+				display: block;
+
+				padding: 10px;
+		 	}
+			
+			#needMoreForm, #choiceForm, #results{
+				display: none;
+			}
+			table, th, td {
+				border: 1px solid black;
+			}
+		</style>
+		<!-- Fetch an array of bars to be shown in the grid -->
+		<iron-ajax id="Firstajax" 
+			url="/api/checkExists" 
+			handle-as="json" 
+			method="post" 
+			body = '{ "First_name": "{{First_name}}", "_Number": "{{_Number}}"}'
+			content-type="application/json"
+			on-response="handleResponse">
+		</iron-ajax>
+
+		<iron-ajax id="Secondajax" 
+			url="/api/add/user" 
+			handle-as="json" 
+			method="post" 
+			body = '{ "First_name": "{{First_name}}", "Address": "{{Address}}", "City": "{{City}}", "Phone": "{{Phone}}", "_Number": "{{_Number}}"}'
+			content-type="application/json"
+			on-response="handleResponseTwo">
+		</iron-ajax>
+		<iron-ajax id="Thirdajax" 
+			url="/api/gen1" 
+			handle-as="json" 
+			method="post" 
+			body = '{ "Low_ABV": "{{Low_ABV}}", "High_ABV": "{{High_ABV}}", "Style1": "{{Style1}}", "Style2": "{{Style2}}", "Style3": "{{Style3}}", "Low_IBU": "{{Low_IBU}}", "High_IBU": "{{High_IBU}}", "Low_SRM": "{{Low_SRM}}", "High_SRM": "{{High_SRM}}", "Opinion": "{{Opinion}}", "_Number": "{{_Number}}"}'
+			content-type="application/json"
+			on-response="handleResponseThree">
+		</iron-ajax>
+		<iron-ajax id="Fourthajax" 
+			url="/api/gen2" 
+			handle-as="json" 
+			method="post" 
+			body = '{ "Low_ABV": "{{Low_ABV}}", "High_ABV": "{{High_ABV}}", "Style1": "{{Style1}}", "Style2": "{{Style2}}", "Style3": "{{Style3}}", "Low_IBU": "{{Low_IBU}}", "High_IBU": "{{High_IBU}}", "Low_SRM": "{{Low_SRM}}", "High_SRM": "{{High_SRM}}", "Opinion": "{{Opinion}}", "_Number": "{{_Number}}"}'
+			content-type="application/json"
+			on-response="handleResponseFour">
+		</iron-ajax>
+		<iron-ajax id="Fifthajax" 
+			url="/api/gen3" 
+			handle-as="json" 
+			method="post" 
+			body = '{ "Low_ABV": "{{Low_ABV}}", "High_ABV": "{{High_ABV}}", "Style1": "{{Style1}}", "Style2": "{{Style2}}", "Style3": "{{Style3}}", "Low_IBU": "{{Low_IBU}}", "High_IBU": "{{High_IBU}}", "Low_SRM": "{{Low_SRM}}", "High_SRM": "{{High_SRM}}", "Opinion": "{{Opinion}}", "_Number": "{{_Number}}"}'
+			content-type="application/json"
+			on-response="handleResponseFive">
+		</iron-ajax>
+		<iron-ajax id="Sixthajax" 
+			url="/api/gen4" 
+			handle-as="json" 
+			method="post" 
+			body = '{ "Low_ABV": "{{Low_ABV}}", "High_ABV": "{{High_ABV}}", "Style1": "{{Style1}}", "Style2": "{{Style2}}", "Style3": "{{Style3}}", "Low_IBU": "{{Low_IBU}}", "High_IBU": "{{High_IBU}}", "Low_SRM": "{{Low_SRM}}", "High_SRM": "{{High_SRM}}", "Opinion": "{{Opinion}}", "_Number": "{{_Number}}"}'
+			content-type="application/json"
+			on-response="handleResponseSix">
+		</iron-ajax>
+		<iron-ajax id="Seventhajax" 
+			url="/api/gen5" 
+			handle-as="json" 
+			method="post" 
+			body = '{ "Low_ABV": "{{Low_ABV}}", "High_ABV": "{{High_ABV}}", "Style1": "{{Style1}}", "Style2": "{{Style2}}", "Style3": "{{Style3}}", "Low_IBU": "{{Low_IBU}}", "High_IBU": "{{High_IBU}}", "Low_SRM": "{{Low_SRM}}", "High_SRM": "{{High_SRM}}", "Opinion": "{{Opinion}}", "_Number": "{{_Number}}"}'
+			content-type="application/json"
+			on-response="handleResponseSeven">
+		</iron-ajax>
+
+		
+
+		<div id="initForm" class="card">
+			<iron-form id="firstForm" >
+				<h1>Please Enter your Basic personal information in order to create your schedule!</h1>
+				<span>Please make sure to register your credit card.<br></span>
+				<span>If we have not found you, we will ask you to enter some more information about yourself.</span>
+				<form method="get" action="/form/handler">
+
+          			
+					<paper-input type="text"
+						name="First_name" 
+						label="Name" 
+						value="{{First_name}}"></paper-input>
+					<paper-input type="text" 
+						name="_Number" 
+						label="Credit Card (NUMBERS ONLY)" 
+						value="{{_Number}}"></paper-input>
+					
+					<paper-button raised 
+						on-click="giveInfo">Submit</paper-button>
+				</form>
+			</iron-form>
+		</div>
+
+		<div id="needMoreForm" class="card">
+			<iron-form id="secondForm" >
+				<h1>Please Enter your Detailed personal information</h1>
+				<span>Enter some more information about yourself so we can keep track of you.<br> Then we will be able to get you your schedule!<br></span>
+				<form method="get" action="/form/handler">
+					<paper-input type="text"
+						name="First_name" 
+						label="Name" 
+						value="{{First_name}}"></paper-input>
+					<paper-input type="text"
+						name="Address" 
+						label="Address" 
+						value="{{Address}}"></paper-input>
+					<paper-input type="text" 
+						name="City" 
+						label="City" 
+						value="{{City}}"></paper-input>
+					<paper-dropdown-menu label="State" 
+						value="{{State}}">
+						<paper-listbox slot="dropdown-content" 
+							selected="0" >
+							<paper-item>Alabama</paper-item> <paper-item>Alaska</paper-item> <paper-item>Arizona</paper-item> <paper-item>Arkansas</paper-item> <paper-item>California</paper-item> <paper-item>Colorado</paper-item> <paper-item>Connecticut</paper-item> <paper-item>Delaware</paper-item> <paper-item>Florida</paper-item> <paper-item>Georgia</paper-item>
+							<paper-item>Hawaii</paper-item> <paper-item>Idaho</paper-item> <paper-item>Illinois</paper-item> <paper-item>Indiana</paper-item> <paper-item>Iowa</paper-item> <paper-item>Kansas</paper-item> <paper-item>Kentucky</paper-item> <paper-item>Louisiana</paper-item> <paper-item>Maine</paper-item> <paper-item>Maryland</paper-item>
+							<paper-item>Massachusetts</paper-item> <paper-item>Michigan</paper-item> <paper-item>Minnesota</paper-item> <paper-item>Mississippi</paper-item> <paper-item>Missouri</paper-item> <paper-item>Montana</paper-item> <paper-item>Nebraska</paper-item> <paper-item>Nevada</paper-item> <paper-item>New Hampshire</paper-item> <paper-item>New Jersey</paper-item>
+							<paper-item>New Mexico</paper-item> <paper-item>New York</paper-item> <paper-item>North Carolina</paper-item> <paper-item>North Dakota</paper-item> <paper-item>Ohio</paper-item> <paper-item>Oklahoma</paper-item> <paper-item>Oregon</paper-item> <paper-item>Pennsylvania</paper-item> <paper-item>Rhode Island</paper-item> <paper-item>South Carolina</paper-item>
+							<paper-item>South Dakota</paper-item> <paper-item>Tennessee</paper-item> <paper-item>Texas</paper-item> <paper-item>Utah</paper-item> <paper-item>Vermont</paper-item> <paper-item>Virgina</paper-item> <paper-item>Washington</paper-item> <paper-item>West Virgina</paper-item> <paper-item>Wisconsin</paper-item> <paper-item>Wyoming</paper-item>
+						</paper-listbox>
+					</paper-dropdown-menu>
+					<paper-input type="text" 
+						name="Phone" 
+						label="Phone (NUMBERS ONLY)" 
+						value="{{Phone}}"></paper-input>
+					<paper-input type="text" 
+						name="_Number" 
+						label="Credit Card (NUMBERS ONLY)" 
+						value="{{_Number}}"></paper-input>
+					<br>
+					<paper-button raised 
+						on-click="saveInfo">Submit</paper-button>
+				</form>
+			</iron-form>
+			<span><br>((FOR TA GRADERS:)) Query #1 in List of Good Queries demonstrates that you have been added to the database<br><br>It will also "find" your facebook friends and add them</span>
+		</div>
+		<div id="choiceForm" class="card">
+			<iron-form id="secondForm" >
+				<h1>Please Enter your preferences to insure you enjoy your twelve month package!</h1>
+				<form method="get" action="/form/handler">
+
+					<br>
+					<h3>Select the range of alcohol content percentage (0 to 100)</h3>
+					<paper-input type="text"
+						name="Low_ABV" 
+						label="Low_ABV" 
+						value="{{Low_ABV}}"></paper-input>
+					<paper-input type="text"
+						name="High_ABV" 
+						label="High_ABV" 
+						value="{{High_ABV}}"></paper-input>
+					<br>
+					<h3>Pick your Three favorite Types of Beer</h3>
+					<paper-dropdown-menu label="Style1" 
+						value="{{Style1}}">
+						<paper-listbox slot="dropdown-content" 
+							selected="0" >
+							<paper-item>Altbier</paper-item><paper-item>American Adjunct Lager</paper-item><paper-item>American Amber / Red Ale</paper-item><paper-item>American Amber / Red Lager</paper-item><paper-item>American Barleywine</paper-item><paper-item>American Black Ale</paper-item><paper-item>American Blonde Ale</paper-item><paper-item>American Brown Ale</paper-item><paper-item>American Dark Wheat Ale</paper-item><paper-item>American Double / Imperial IPA</paper-item>
+							<paper-item>American Double / Imperial Pilsner</paper-item><paper-item>American Double / Imperial Stout</paper-item><paper-item>American IPA</paper-item><paper-item>American Malt Liquor</paper-item><paper-item>American Pale Ale (APA)</paper-item><paper-item>American Pale Lager</paper-item><paper-item>American Pale Wheat Ale</paper-item><paper-item>American Porter</paper-item><paper-item>American Stout</paper-item><paper-item>American Strong Ale</paper-item>
+							<paper-item>American Wild Ale</paper-item><paper-item>Baltic Porter</paper-item><paper-item>Belgian Dark Ale</paper-item><paper-item>Belgian IPA</paper-item><paper-item>Belgian Pale Ale</paper-item><paper-item>Belgian Strong Dark Ale</paper-item><paper-item>Belgian Strong Pale Ale</paper-item><paper-item>Berliner Weissbier</paper-item><paper-item>Biare de Champagne / Biare Brut</paper-item><paper-item>Biare de Garde</paper-item><paper-item>Black and Tan</paper-item>
+							<paper-item>Bock</paper-item><paper-item>Braggot</paper-item><paper-item>California Common / Steam Beer</paper-item><paper-item>Chile Beer</paper-item><paper-item>Cream Ale</paper-item><paper-item>Czech Pilsener</paper-item><paper-item>Doppelbock</paper-item><paper-item>Dortmunder / Export Lager</paper-item><paper-item>Dubbel</paper-item><paper-item>Dunkelweizen</paper-item><paper-item>Eisbock</paper-item><paper-item>English Barleywine</paper-item><paper-item>English Bitter</paper-item>
+							<paper-item>English Brown Ale</paper-item><paper-item>English Dark Mild Ale</paper-item><paper-item>English India Pale Ale (IPA)</paper-item><paper-item>English Pale Ale</paper-item><paper-item>English Pale Mild Ale</paper-item><paper-item>English Porter</paper-item><paper-item>English Stout</paper-item><paper-item>English Strong Ale</paper-item><paper-item>Euro Dark Lager</paper-item><paper-item>Euro Pale Lager</paper-item><paper-item>Euro Strong Lager</paper-item>
+							<paper-item>Extra Special / Strong Bitter (ESB)</paper-item><paper-item>Flanders Oud Bruin</paper-item><paper-item>Flanders Red Ale</paper-item><paper-item>Foreign / Export Stout</paper-item><paper-item>Fruit / Vegetable Beer</paper-item><paper-item>German Pilsener</paper-item><paper-item>Gose</paper-item><paper-item>Gueuze</paper-item><paper-item>Hefeweizen</paper-item><paper-item>Herbed / Spiced Beer</paper-item><paper-item>Irish Dry Stout</paper-item>
+							<paper-item>Irish Red Ale</paper-item><paper-item>Kaisch</paper-item><paper-item>Kellerbier / Zwickelbier</paper-item><paper-item>Kristalweizen</paper-item><paper-item>Kvass</paper-item><paper-item>Lambic - Fruit</paper-item><paper-item>Lambic - Unblended</paper-item><paper-item>Light Lager</paper-item><paper-item>Low Alcohol Beer</paper-item><paper-item>Maibock / Helles Bock</paper-item><paper-item>Marzen / Oktoberfest</paper-item><paper-item>Milk / Sweet Stout</paper-item>
+							<paper-item>Munich Dunkel Lager</paper-item><paper-item>Munich Helles Lager</paper-item><paper-item>Oatmeal Stout</paper-item><paper-item>Old Ale</paper-item><paper-item>Pumpkin Ale</paper-item><paper-item>Quadrupel (Quad)</paper-item><paper-item>Rauchbier</paper-item><paper-item>Roggenbier</paper-item><paper-item>Russian Imperial Stout</paper-item><paper-item>Rye Beer</paper-item><paper-item>Sahti</paper-item><paper-item>Saison / Farmhouse Ale</paper-item>
+							<paper-item>Schwarzbier</paper-item><paper-item>Scotch Ale / Wee Heavy</paper-item><paper-item>Scottish Ale</paper-item><paper-item>Scottish Gruit / Ancient Herbed Ale</paper-item><paper-item>Smoked Beer</paper-item><paper-item>Tripel</paper-item><paper-item>Vienna Lager</paper-item><paper-item>Weizenbock</paper-item><paper-item>Wheatwine</paper-item><paper-item>Winter Warmer</paper-item><paper-item>Witbier</paper-item>
+						</paper-listbox>
+					</paper-dropdown-menu>
+					<paper-dropdown-menu label="Style2" 
+						value="{{Style2}}">
+						<paper-listbox slot="dropdown-content" 
+							selected="50" >
+							<paper-item>Altbier</paper-item><paper-item>American Adjunct Lager</paper-item><paper-item>American Amber / Red Ale</paper-item><paper-item>American Amber / Red Lager</paper-item><paper-item>American Barleywine</paper-item><paper-item>American Black Ale</paper-item><paper-item>American Blonde Ale</paper-item><paper-item>American Brown Ale</paper-item><paper-item>American Dark Wheat Ale</paper-item><paper-item>American Double / Imperial IPA</paper-item>
+							<paper-item>American Double / Imperial Pilsner</paper-item><paper-item>American Double / Imperial Stout</paper-item><paper-item>American IPA</paper-item><paper-item>American Malt Liquor</paper-item><paper-item>American Pale Ale (APA)</paper-item><paper-item>American Pale Lager</paper-item><paper-item>American Pale Wheat Ale</paper-item><paper-item>American Porter</paper-item><paper-item>American Stout</paper-item><paper-item>American Strong Ale</paper-item>
+							<paper-item>American Wild Ale</paper-item><paper-item>Baltic Porter</paper-item><paper-item>Belgian Dark Ale</paper-item><paper-item>Belgian IPA</paper-item><paper-item>Belgian Pale Ale</paper-item><paper-item>Belgian Strong Dark Ale</paper-item><paper-item>Belgian Strong Pale Ale</paper-item><paper-item>Berliner Weissbier</paper-item><paper-item>Biare de Champagne / Biare Brut</paper-item><paper-item>Biare de Garde</paper-item><paper-item>Black and Tan</paper-item>
+							<paper-item>Bock</paper-item><paper-item>Braggot</paper-item><paper-item>California Common / Steam Beer</paper-item><paper-item>Chile Beer</paper-item><paper-item>Cream Ale</paper-item><paper-item>Czech Pilsener</paper-item><paper-item>Doppelbock</paper-item><paper-item>Dortmunder / Export Lager</paper-item><paper-item>Dubbel</paper-item><paper-item>Dunkelweizen</paper-item><paper-item>Eisbock</paper-item><paper-item>English Barleywine</paper-item><paper-item>English Bitter</paper-item>
+							<paper-item>English Brown Ale</paper-item><paper-item>English Dark Mild Ale</paper-item><paper-item>English India Pale Ale (IPA)</paper-item><paper-item>English Pale Ale</paper-item><paper-item>English Pale Mild Ale</paper-item><paper-item>English Porter</paper-item><paper-item>English Stout</paper-item><paper-item>English Strong Ale</paper-item><paper-item>Euro Dark Lager</paper-item><paper-item>Euro Pale Lager</paper-item><paper-item>Euro Strong Lager</paper-item>
+							<paper-item>Extra Special / Strong Bitter (ESB)</paper-item><paper-item>Flanders Oud Bruin</paper-item><paper-item>Flanders Red Ale</paper-item><paper-item>Foreign / Export Stout</paper-item><paper-item>Fruit / Vegetable Beer</paper-item><paper-item>German Pilsener</paper-item><paper-item>Gose</paper-item><paper-item>Gueuze</paper-item><paper-item>Hefeweizen</paper-item><paper-item>Herbed / Spiced Beer</paper-item><paper-item>Irish Dry Stout</paper-item>
+							<paper-item>Irish Red Ale</paper-item><paper-item>Kaisch</paper-item><paper-item>Kellerbier / Zwickelbier</paper-item><paper-item>Kristalweizen</paper-item><paper-item>Kvass</paper-item><paper-item>Lambic - Fruit</paper-item><paper-item>Lambic - Unblended</paper-item><paper-item>Light Lager</paper-item><paper-item>Low Alcohol Beer</paper-item><paper-item>Maibock / Helles Bock</paper-item><paper-item>Marzen / Oktoberfest</paper-item><paper-item>Milk / Sweet Stout</paper-item>
+							<paper-item>Munich Dunkel Lager</paper-item><paper-item>Munich Helles Lager</paper-item><paper-item>Oatmeal Stout</paper-item><paper-item>Old Ale</paper-item><paper-item>Pumpkin Ale</paper-item><paper-item>Quadrupel (Quad)</paper-item><paper-item>Rauchbier</paper-item><paper-item>Roggenbier</paper-item><paper-item>Russian Imperial Stout</paper-item><paper-item>Rye Beer</paper-item><paper-item>Sahti</paper-item><paper-item>Saison / Farmhouse Ale</paper-item>
+							<paper-item>Schwarzbier</paper-item><paper-item>Scotch Ale / Wee Heavy</paper-item><paper-item>Scottish Ale</paper-item><paper-item>Scottish Gruit / Ancient Herbed Ale</paper-item><paper-item>Smoked Beer</paper-item><paper-item>Tripel</paper-item><paper-item>Vienna Lager</paper-item><paper-item>Weizenbock</paper-item><paper-item>Wheatwine</paper-item><paper-item>Winter Warmer</paper-item><paper-item>Witbier</paper-item>
+						</paper-listbox>
+					</paper-dropdown-menu>
+					<paper-dropdown-menu label="Style3" 
+						value="{{Style3}}">
+						<paper-listbox slot="dropdown-content" 
+							selected="100" >
+							<paper-item>Altbier</paper-item><paper-item>American Adjunct Lager</paper-item><paper-item>American Amber / Red Ale</paper-item><paper-item>American Amber / Red Lager</paper-item><paper-item>American Barleywine</paper-item><paper-item>American Black Ale</paper-item><paper-item>American Blonde Ale</paper-item><paper-item>American Brown Ale</paper-item><paper-item>American Dark Wheat Ale</paper-item><paper-item>American Double / Imperial IPA</paper-item>
+							<paper-item>American Double / Imperial Pilsner</paper-item><paper-item>American Double / Imperial Stout</paper-item><paper-item>American IPA</paper-item><paper-item>American Malt Liquor</paper-item><paper-item>American Pale Ale (APA)</paper-item><paper-item>American Pale Lager</paper-item><paper-item>American Pale Wheat Ale</paper-item><paper-item>American Porter</paper-item><paper-item>American Stout</paper-item><paper-item>American Strong Ale</paper-item>
+							<paper-item>American Wild Ale</paper-item><paper-item>Baltic Porter</paper-item><paper-item>Belgian Dark Ale</paper-item><paper-item>Belgian IPA</paper-item><paper-item>Belgian Pale Ale</paper-item><paper-item>Belgian Strong Dark Ale</paper-item><paper-item>Belgian Strong Pale Ale</paper-item><paper-item>Berliner Weissbier</paper-item><paper-item>Biare de Champagne / Biare Brut</paper-item><paper-item>Biare de Garde</paper-item><paper-item>Black and Tan</paper-item>
+							<paper-item>Bock</paper-item><paper-item>Braggot</paper-item><paper-item>California Common / Steam Beer</paper-item><paper-item>Chile Beer</paper-item><paper-item>Cream Ale</paper-item><paper-item>Czech Pilsener</paper-item><paper-item>Doppelbock</paper-item><paper-item>Dortmunder / Export Lager</paper-item><paper-item>Dubbel</paper-item><paper-item>Dunkelweizen</paper-item><paper-item>Eisbock</paper-item><paper-item>English Barleywine</paper-item><paper-item>English Bitter</paper-item>
+							<paper-item>English Brown Ale</paper-item><paper-item>English Dark Mild Ale</paper-item><paper-item>English India Pale Ale (IPA)</paper-item><paper-item>English Pale Ale</paper-item><paper-item>English Pale Mild Ale</paper-item><paper-item>English Porter</paper-item><paper-item>English Stout</paper-item><paper-item>English Strong Ale</paper-item><paper-item>Euro Dark Lager</paper-item><paper-item>Euro Pale Lager</paper-item><paper-item>Euro Strong Lager</paper-item>
+							<paper-item>Extra Special / Strong Bitter (ESB)</paper-item><paper-item>Flanders Oud Bruin</paper-item><paper-item>Flanders Red Ale</paper-item><paper-item>Foreign / Export Stout</paper-item><paper-item>Fruit / Vegetable Beer</paper-item><paper-item>German Pilsener</paper-item><paper-item>Gose</paper-item><paper-item>Gueuze</paper-item><paper-item>Hefeweizen</paper-item><paper-item>Herbed / Spiced Beer</paper-item><paper-item>Irish Dry Stout</paper-item>
+							<paper-item>Irish Red Ale</paper-item><paper-item>Kaisch</paper-item><paper-item>Kellerbier / Zwickelbier</paper-item><paper-item>Kristalweizen</paper-item><paper-item>Kvass</paper-item><paper-item>Lambic - Fruit</paper-item><paper-item>Lambic - Unblended</paper-item><paper-item>Light Lager</paper-item><paper-item>Low Alcohol Beer</paper-item><paper-item>Maibock / Helles Bock</paper-item><paper-item>Marzen / Oktoberfest</paper-item><paper-item>Milk / Sweet Stout</paper-item>
+							<paper-item>Munich Dunkel Lager</paper-item><paper-item>Munich Helles Lager</paper-item><paper-item>Oatmeal Stout</paper-item><paper-item>Old Ale</paper-item><paper-item>Pumpkin Ale</paper-item><paper-item>Quadrupel (Quad)</paper-item><paper-item>Rauchbier</paper-item><paper-item>Roggenbier</paper-item><paper-item>Russian Imperial Stout</paper-item><paper-item>Rye Beer</paper-item><paper-item>Sahti</paper-item><paper-item>Saison / Farmhouse Ale</paper-item>
+							<paper-item>Schwarzbier</paper-item><paper-item>Scotch Ale / Wee Heavy</paper-item><paper-item>Scottish Ale</paper-item><paper-item>Scottish Gruit / Ancient Herbed Ale</paper-item><paper-item>Smoked Beer</paper-item><paper-item>Tripel</paper-item><paper-item>Vienna Lager</paper-item><paper-item>Weizenbock</paper-item><paper-item>Wheatwine</paper-item><paper-item>Winter Warmer</paper-item><paper-item>Witbier</paper-item>
+						</paper-listbox>
+					</paper-dropdown-menu>
+					<br>
+					<br>
+					<h3>Select the range of how Bitter the beer should be (0 to 100)</h3>
+					<paper-input type="text"
+						name="Low_IBU" 
+						label="Low_IBU" 
+						value="{{Low_IBU}}"></paper-input>
+					<paper-input type="text"
+						name="High_IBU" 
+						label="High_IBU" 
+						value="{{High_IBU}}"></paper-input>
+					<br>
+					<h3>Select the range of how light to dark colored the beer should be (1 to 40) (1 being light colored, 40 being dark)</h3>
+					<paper-input type="text"
+						name="Low_SRM" 
+						label="Low_SRM" 
+						value="{{Low_SRM}}"></paper-input>
+					<paper-input type="text"
+						name="High_SRM" 
+						label="High_SRM" 
+						value="{{High_SRM}}"></paper-input>
+					<br>
+					<h3>How much do your friend's opinion's on beer matter to you?</h3>
+					<paper-dropdown-menu label="Opinion" 
+						value="{{Opinion}}">
+						<paper-listbox slot="dropdown-content" 
+							selected="0" >
+							<paper-item>A lot</paper-item>
+							<paper-item>Somewhat</paper-item>
+							<paper-item>Not at all</paper-item>
+						</paper-listbox>
+					</paper-dropdown-menu>
+					<br>
+					<paper-button raised 
+						on-click="genBeers">Submit</paper-button>
+					<br>
+					<br>
+					<span>Opinion effects how many months the schedule generator will factor in your friend's beer ratings.. 0, 2, or 4 months</span>
+				</form>
+			</iron-form>
+		</div>
+
+		<div id="results" class="card">
+			<h1>Your Beers are Here!</h1>
+			<h2>First three are based on your friend's tastes</h2>
+			<template is="dom-repeat" items="[[stuff]]">
+				<img src="[[item.Image_location]]" alt="hi">
+				<table>
+					<tr>
+						<th>Beer Name</th>
+						<th>ABV</th>
+						<th>Avg rating</th>
+						<th>Total reviews</th>
+					</tr>
+					<tr>
+						<td>[[item.BeerName]]</td>
+						<td>[[item.ABV]]</td>
+						<td>[[item.Rating]]</td>
+						<td>[[item.Num_reviews]]</td>
+					</tr>
+					<tr>
+						<th>Manufacturer</th>
+						<th>City</th>
+						<th>Website</th>
+						<th>Phone</th>
+					</tr>
+					<tr>
+						<td>[[item.ManuName]]</td>
+						<td>[[item.City]]</td>
+						<td>[[item.Website]]</td>
+						<td>[[item.Phone]]</td>
+					</tr>
+				</table>
+				<br>
+			</template>
+			<h2>Next Three are based on your ABV, IBU, and SRM specifications</h2>
+			<template is="dom-repeat" items="[[stuff2]]">
+					<img src="[[item.Image_location]]" alt="hi">
+					<table>
+						<tr>
+							<th>Beer Name</th>
+							<th>ABV</th>
+							<th>Avg rating</th>
+							<th>Total reviews</th>
+						</tr>
+						<tr>
+							<td>[[item.BeerName]]</td>
+							<td>[[item.ABV]]</td>
+							<td>[[item.Rating]]</td>
+							<td>[[item.Num_reviews]]</td>
+						</tr>
+						<tr>
+							<th>Manufacturer</th>
+							<th>City</th>
+							<th>Website</th>
+							<th>Phone</th>
+						</tr>
+						<tr>
+							<td>[[item.ManuName]]</td>
+							<td>[[item.City]]</td>
+							<td>[[item.Website]]</td>
+							<td>[[item.Phone]]</td>
+						</tr>
+					</table>
+					<br>
+			</template>
+				<h2>The next two beers are not anywhere in your city</h2>
+				<template is="dom-repeat" items="[[stuff3]]">
+						<img src="[[item.Image_location]]" alt="hi">
+						<table>
+							<tr>
+								<th>Beer Name</th>
+								<th>ABV</th>
+								<th>Avg rating</th>
+								<th>Total reviews</th>
+							</tr>
+							<tr>
+								<td>[[item.BeerName]]</td>
+								<td>[[item.ABV]]</td>
+								<td>[[item.Rating]]</td>
+								<td>[[item.Num_reviews]]</td>
+							</tr>
+							<tr>
+								<th>Manufacturer</th>
+								<th>City</th>
+								<th>Website</th>
+								<th>Phone</th>
+							</tr>
+							<tr>
+								<td>[[item.ManuName]]</td>
+								<td>[[item.City]]</td>
+								<td>[[item.Website]]</td>
+								<td>[[item.Phone]]</td>
+							</tr>
+						</table>
+						<br>
+				</template>
+				<h2>The next two beers are from our most valued manufactuers</h2>
+				<template is="dom-repeat" items="[[stuff4]]">
+						<img src="[[item.Image_location]]" alt="hi">
+						<table>
+							<tr>
+								<th>Beer Name</th>
+								<th>ABV</th>
+								<th>Avg rating</th>
+								<th>Total reviews</th>
+							</tr>
+							<tr>
+								<td>[[item.BeerName]]</td>
+								<td>[[item.ABV]]</td>
+								<td>[[item.Rating]]</td>
+								<td>[[item.Num_reviews]]</td>
+							</tr>
+							<tr>
+								<th>Manufacturer</th>
+								<th>City</th>
+								<th>Website</th>
+								<th>Phone</th>
+							</tr>
+							<tr>
+								<td>[[item.ManuName]]</td>
+								<td>[[item.City]]</td>
+								<td>[[item.Website]]</td>
+								<td>[[item.Phone]]</td>
+							</tr>
+						</table>
+						<br>
+				</template>
+				<template is="dom-repeat" items="[[stuff5]]">
+						<img src="[[item.Image_location]]" alt="Too few reviews to have an image">
+						<table>
+							<tr>
+								<th>Beer Name</th>
+								<th>ABV</th>
+								<th>Avg rating</th>
+								<th>Total reviews</th>
+							</tr>
+							<tr>
+								<td>[[item.BeerName]]</td>
+								<td>[[item.ABV]]</td>
+								<td>[[item.Rating]]</td>
+								<td>[[item.Num_reviews]]</td>
+							</tr>
+							<tr>
+								<th>Manufacturer</th>
+								<th>City</th>
+								<th>Website</th>
+								<th>Phone</th>
+							</tr>
+							<tr>
+								<td>[[item.ManuName]]</td>
+								<td>[[item.City]]</td>
+								<td>[[item.Website]]</td>
+								<td>[[item.Phone]]</td>
+							</tr>
+						</table>
+						<br>
+				</template>
+		</div>
+	</template>
+
+	<script>
+		class MyView11 extends Polymer.Element {
+			static get is() { return 'my-view11' }
+			
+			static get properties() {
+				return {
+					inTheDB: {
+						type: String,
+						value: "Boop"
+					},
+					First_name: {
+						type: String,
+						value: "Yuko Zajc"
+					},
+					_Number: {
+						type: String,
+						value: "7736100241313255617"
+					}
+				}
+			}
+
+			giveInfo(e){
+				this.inTheDB = "lololol";
+				this.$.Firstajax.generateRequest();
+
+				this.Low_ABV = 0;
+				this.High_ABV = 100
+				this.Low_IBU = 0;
+				this.High_IBU = 100;
+				this.Low_SRM = 1;
+				this.High_SRM = 40;
+			}
+
+			saveInfo(e){
+				this.inTheDB = "24k";
+				this.$.Secondajax.generateRequest();
+				Polymer.dom(this.root).querySelector("#needMoreForm").style.display= "none";
+				Polymer.dom(this.root).querySelector("#choiceForm").style.display = "block";
+			}
+
+			genBeers(e){
+				this.$.Thirdajax.generateRequest();
+				Polymer.dom(this.root).querySelector("#choiceForm").style.display= "none";
+				Polymer.dom(this.root).querySelector("#results").style.display = "block";
+			}
+			handleResponse(data){
+				this.inTheDB = "adfasdf";
+				var stuff = data.detail.response;
+				this.inTheDB = stuff.length;
+				if(this.inTheDB == 0){
+					Polymer.dom(this.root).querySelector("#initForm").style.display= "none";
+					Polymer.dom(this.root).querySelector("#needMoreForm").style.display = "block";					
+				}
+				else {
+					Polymer.dom(this.root).querySelector("#initForm").style.display= "none";
+					Polymer.dom(this.root).querySelector("#choiceForm").style.display = "block";
+				}
+			}
+			handleResponseTwo(data){
+				this.stuff = data.detail.response;
+				window.alert(stuff.length);
+			}
+			handleResponseThree(data){
+				this.stuff = data.detail.response;				
+				this.$.Fourthajax.generateRequest();
+
+			}
+			handleResponseFour(data){		
+				this.stuff2 = data.detail.response;
+				this.$.Fifthajax.generateRequest();
+
+			}
+			handleResponseFive(data){
+				this.stuff3 = data.detail.response;
+				this.$.Sixthajax.generateRequest();
+			}
+			handleResponseSix(data){
+				this.stuff4 = data.detail.response;
+				this.$.Seventhajax.generateRequest();
+			}
+			handleResponseSeven(data){
+				this.stuff5 = data.detail.response;
+				Polymer.dom(this.root).querySelector("#choiceForm").style.display= "none";
+				Polymer.dom(this.root).querySelector("#results").style.display = "block";
+			}
+		}
+
+		window.customElements.define(MyView11.is, MyView11)	
+	</script>
+</dom-module>

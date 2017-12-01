@@ -1,0 +1,141 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/vaadin-material-theme/vaadin-grid.html">
+<link rel="import" href="../bower_components/vaadin-grid/vaadin-grid.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="my-view1">
+	
+	<template>
+		 <style include="shared-styles">
+      :host {
+        display: block;
+
+        padding: 10px;
+      }
+    </style>
+
+		<!-- Fetch an array of bars to be shown in the grid -->
+		<iron-ajax
+			id="requestQuery" 
+			url="/api/query/query"
+			handle-as="json"
+			method="post"
+			body='{ "Query": "{{Query}}" }'
+			content-type="application/json"
+			on-response="handleResponse"></iron-ajax>
+
+		<div class="card">
+			<iron-form>
+				<form method="get" action="/form/handler">
+					<h3>Enter SQL Queries here...sorry for one line...also sorry but you have to hit refresh after every query...best I could do.  Results will display in box below</h3>
+					<paper-input type="text"
+						name="First_name" 
+						label="Enter SQL here" 
+						value={{Query}}>
+					</paper-input>
+					<paper-button raised 
+					on-click="run">Submit</paper-button>
+				</form>
+			</iron-form>
+			<paper-button raised 
+			on-click="refresh">Refresh</paper-button>
+		</div>
+		<vaadin-grid id="mainGrid" aria-label="Basic Binding Example" items="[[_tuples]]">
+			
+			<template is="dom-repeat" items="[[poo]]" as="First">
+				<vaadin-grid-column width="300px" flex-grow="0">
+					<template class="header">[[First]]</template>
+
+					<template>[[helpMePlease(item)]]</template>
+
+					<template class="footer">[[First]]</template>
+				</vaadin-grid-column>
+			</template>
+		</vaadin-grid>
+		
+	</template>
+
+	<script>
+		
+		Polymer({
+			is: 'my-view1',
+			properties: {
+				_tuples: {
+					type: Array
+				},
+				foo: {
+					type: Array
+				},
+				poo: {
+					type: Array
+				},
+				loo: {
+					type: String,
+					value: "YOYOYOYO"
+				},
+				modulus: {
+					type: Number,
+					value: 0
+				},
+				Query: {
+					type: String,
+					value: "SELECT * FROM Drinkers LIMIT 1000"
+				}
+			},
+			ready: function () {
+				//this.$.requestBars.generateRequest();
+			},
+
+			run(e){
+				this.$.requestQuery.generateRequest();
+			},
+
+			helpMePlease: function(obj) {
+				//window.alert(obj);
+				//var hi = len;
+				var helper = Object.keys(obj);
+				
+				//window.alert(helper);
+				var giveval = this.modulus % helper.length;
+				var returnval = obj[helper[giveval]];
+				this.modulus += 1;
+				return returnval;
+			},
+			handleResponse: function (data) {
+				this._tuples = data.detail.response;
+
+				/* Takes one and gets a list of the keys */
+				this.foo = this._tuples[0];			
+				this.poo = Object.keys(this.foo);
+						
+			},
+			refresh(e){
+				location.reload();
+			}
+		});
+		class MyView1 extends Polymer.Element {
+			static get is() { return 'my-view1'; }
+		}
+
+
+		window.customElements.define(MyView1.is, MyView1);
+	</script>
+</dom-module>
